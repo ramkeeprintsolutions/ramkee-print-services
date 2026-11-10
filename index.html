@@ -79,7 +79,7 @@ const input=document.getElementById("files"),list=document.getElementById("fileL
 const orderButton=document.getElementById("prepareOrderBtn"),orderResult=document.getElementById("orderResult");
 let files=[],pageTotal=0,isPreparing=false;
 pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-const money=n=>"₹"+(Number(n)||0).toFixed(2).replace(/\\.00$/,"");
+const money=n=>"₹"+(Number(n)||0).toFixed(2).replace(/\.00$/,"");
 function setStatus(message,isError=false){statusBox.hidden=!message;statusBox.textContent=message;statusBox.className="status"+(isError?" error":"");}
 function updatePrice(){
  const copies=Math.max(1,Math.min(20,Number(document.getElementById("copies").value)||1));
@@ -108,7 +108,7 @@ async function convertDocx(file){
  if(!res.ok||!data.pdfBase64)throw new Error(data.error||"DOCX conversion failed.");
  const raw=atob(data.pdfBase64),bytes=new Uint8Array(raw.length);
  for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
- return new File([bytes],file.name.replace(/\\.docx$/i,".pdf"),{type:"application/pdf",lastModified:Date.now()});
+ return new File([bytes],file.name.replace(/\.docx$/i,".pdf"),{type:"application/pdf",lastModified:Date.now()});
 }
 async function renderPdf(file){
  const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
@@ -157,8 +157,8 @@ async function prepareOrder(){
  const email=document.getElementById("customerEmail").value.trim();
  const copies=Math.max(1,Math.min(20,Number(document.getElementById("copies").value)||1));
  if(customerName.length<2){setStatus("Please enter your name.",true);return;}
- if(!/^[6-9]\\d{9}$/.test(mobileNumber)){setStatus("Enter a valid 10-digit Indian mobile number.",true);return;}
- if(email&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){setStatus("Enter a valid email address.",true);return;}
+ if(!/^[6-9]\d{9}$/.test(mobileNumber)){setStatus("Enter a valid 10-digit Indian mobile number.",true);return;}
+ if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setStatus("Enter a valid email address.",true);return;}
  if(!files.length||!files.every(f=>Number.isInteger(f.pageCount)&&f.pageCount>0)){setStatus("Please upload and preview all files successfully.",true);return;}
  if(pageTotal<1||pageTotal>500){setStatus("Total pages must be between 1 and 500.",true);return;}
  isPreparing=true;orderButton.textContent="Preparing secure upload…";updatePrice();drawList();orderResult.hidden=true;
